@@ -1,13 +1,22 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    .env                                               :+:      :+:    :+:    #
+#    Dockerfile                                         :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: anclarma <anclarma@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/03/26 12:51:01 by anclarma          #+#    #+#              #
-#    Updated: 2022/03/26 20:21:33 by anclarma         ###   ########.fr        #
+#    Created: 2022/03/26 12:24:15 by anclarma          #+#    #+#              #
+#    Updated: 2022/03/26 22:46:33 by anclarma         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-MYSQL_ROOT_PASSWORD=my-secret-pw
+FROM	debian:buster
+
+RUN	apt-get update	\
+	&& apt-get upgrade -y	\
+	&& apt-get install -y mariadb-server	\
+	&& mkdir -p /var/lib/mysql
+
+COPY	my.cnf /etc/mysql/.
+
+ENTRYPOINT ["mysqld_safe"]
