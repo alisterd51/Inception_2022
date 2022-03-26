@@ -10,6 +10,8 @@ services:
     networks:
       - backend
     restart: on-failure
+    volumes:
+      - wp:/var/www/html
   wordpress:
     build: ./wordpress
     ports:
@@ -19,6 +21,8 @@ services:
     restart: on-failure
     env_file:
       - .env
+    volumes:
+      - wp:/var/www/html
   mariadb:
     build: ./mariadb
     ports:
@@ -28,6 +32,23 @@ services:
     restart: on-failure
     env_file:
       - .env
+    volumes:
+      - db:/var/lib/mysql
+
 networks:
   backend:
     driver: bridge
+
+volumes:
+  db:
+    driver: local
+    driver_opts:
+      type: "none"
+      o: "bind"
+      device: "/tmp/data/db"
+  wp:
+    driver: local
+    driver_opts:
+      type: "none"
+      o: "bind"
+      device: "/tmp/data/wp"
