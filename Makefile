@@ -11,6 +11,9 @@
 # **************************************************************************** #
 
 up:
+	mkdir -p /home/anclarma/data/db /home/anclarma/data/wp
 	docker-compose -f srcs/docker-compose.yml up --build -d
 down:
 	docker-compose -f srcs/docker-compose.yml down
+clean:
+	rm -rf /home/anclarma/data
