@@ -14,12 +14,19 @@ FROM	debian:buster
 
 RUN	apt-get update	\
 	&& apt-get upgrade -y	\
-	&& apt-get install -y nginx	\
-	&& mkdir -p /etc/nginx/certificate
+	&& apt-get install -y nginx	openssl	\
+	&& mkdir -p /etc/nginx/certificate	\
+	&& openssl req -new	\
+		-newkey rsa:4096	\
+		-x509	\
+		-sha256	\
+		-days 365	\
+		-nodes	\
+		-out /etc/nginx/certificate/nginx-certificate.crt	\
+		-keyout /etc/nginx/certificate/nginx.key	\
+		-subj "/C=FR/ST=France/L=Paris/O=42/CN=anclarma"
 
 COPY	nginx.conf /etc/nginx/sites-available/default
-COPY	nginx-certificate.crt /etc/nginx/certificate/nginx-certificate.crt
-COPY	nginx.key /etc/nginx/certificate/nginx.key
 
 ENTRYPOINT ["nginx"]
 

@@ -12,8 +12,8 @@
 
 up:
 	mkdir -p /home/anclarma/data/db /home/anclarma/data/wp
-	docker-compose -f srcs/docker-compose.yml up --build -d
+	docker-compose -f srcs/docker-compose.yml --env-file srcs/.env up --build -d
 down:
-	docker-compose -f srcs/docker-compose.yml down
+	docker-compose -f srcs/docker-compose.yml --env-file srcs/.env down
 clean:
 	rm -rf /home/anclarma/data

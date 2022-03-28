@@ -13,7 +13,10 @@ services:
     volumes:
       - wp:/var/www/html
   wordpress:
-    build: ./wordpress
+    build:
+      context: ./wordpress
+      args:
+        test: "${TEST}"
     ports:
       - '9000'
     networks:

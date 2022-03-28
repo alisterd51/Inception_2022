@@ -14,10 +14,16 @@ FROM	debian:buster
 
 RUN	apt-get update	\
 	&& apt-get upgrade -y	\
-	&& apt-get install -y php7.3-fpm	\
-	&& mkdir -p /run/php
+	&& apt-get install -y php7.3-fpm php7.3-mysqli wget	\
+	&& mkdir -p /run/php	\
+	&& wget -O wordpress.tar.gz https://fr.wordpress.org/wordpress-5.9.2-fr_FR.tar.gz
+#	&& mkdir -p /var/www/html	\
+#	&& tar -xf wordpress.tar.gz -C /var/www/html	\
+#	&& rm -f wordpress.tar.gz
 
-RUN	echo $TEST
+ARG	test
+
+RUN	touch ${test}
 
 COPY	www.conf /etc/php/7.3/fpm/pool.d/www.conf
 
