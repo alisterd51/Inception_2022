@@ -19,4 +19,8 @@ RUN	apt-get update	\
 
 COPY	my.cnf /etc/mysql/.
 
+ARG	db_name
+
+RUN	env > env_tmp
+
 ENTRYPOINT ["mysqld_safe"]

@@ -2,39 +2,50 @@ version: "3.9"
 
 services:
   nginx:
+    container_name: container_nginx
     build: ./nginx
+    image: container_nginx
     ports:
-      - '8080:80'
-      - '8081:443'
-      # - '443:443'
+      - '443:443'
     networks:
       - backend
     restart: on-failure
     volumes:
       - wp:/var/www/html
+    depends_on:
+      - wordpress
+      - mariadb
   wordpress:
+    container_name: container_wordpress
     build:
       context: ./wordpress
       args:
-        test: "${TEST}"
+        db_name: "${DB_NAME}"
+        db_user: "${DB_USER}"
+        db_password: "${DB_PASSWORD}"
+        db_host: "${DB_HOST}"
+    image: container_wordpress
     ports:
       - '9000'
     networks:
       - backend
     restart: on-failure
-    env_file:
-      - .env
     volumes:
       - wp:/var/www/html
+    depends_on:
+      - mariadb
   mariadb:
-    build: ./mariadb
+    container_name: container_mariadb
+    build:
+      context: ./mariadb
+      args:
+        db_name: "${DB_NAME}"
+    image: container_mariadb
     ports:
       - '3306'
     networks:
       - backend
     restart: on-failure
-    env_file:
-      - .env
     volumes:
       - db:/var/lib/mysql
 

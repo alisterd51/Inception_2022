@@ -12,21 +12,32 @@
 
 FROM	debian:buster
 
+#Install utils
 RUN	apt-get update	\
 	&& apt-get upgrade -y	\
-	&& apt-get install -y php7.3-fpm php7.3-mysqli wget	\
-	&& mkdir -p /run/php	\
-	&& wget -O wordpress.tar.gz https://fr.wordpress.org/wordpress-5.9.2-fr_FR.tar.gz
-#	&& mkdir -p /var/www/html	\
-#	&& tar -xf wordpress.tar.gz -C /var/www/html	\
-#	&& rm -f wordpress.tar.gz
+	&& apt-get install -y php7.3-fpm php7.3-mysqli wget
 
-ARG	test
+#Download wordpress
+RUN	wget -O wordpress.tar.gz https://fr.wordpress.org/wordpress-5.9.2-fr_FR.tar.gz	\
+	&& tar -xf wordpress.tar.gz	\
+	&& rm -rf wordpress.tar.gz
 
-RUN	touch ${test}
+#Config wordpress
+ARG	db_name
+ARG	db_user
+ARG	db_password
+ARG	db_host
+COPY	wp-config.php wordpress/wp-config.php
+RUN	sed -i 's/votre_nom_de_bdd/'$db_name'/' wordpress/wp-config.php	\
+	&& sed -i 's/votre_utilisateur_de_bdd/'$db_user'/' wordpress/wp-config.php	\
+	&& sed -i 's/votre_mdp_de_bdd/'$db_password'/' wordpress/wp-config.php	\
+	&& sed -i 's/localhost/'$db_host'/' wordpress/wp-config.php
 
+#Config php-fpm
 COPY	www.conf /etc/php/7.3/fpm/pool.d/www.conf
+RUN	mkdir -p /run/php
 
-ENTRYPOINT ["php-fpm7.3"]
+COPY	entrypoint-wordpress.sh /entrypoint-wordpress.sh
+RUN	chmod +x /entrypoint-wordpress.sh
 
-CMD	["-F"]
+ENTRYPOINT ["/entrypoint-wordpress.sh"]
