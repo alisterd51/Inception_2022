@@ -38,13 +38,13 @@ services:
     container_name: container_mariadb
     build:
       context: ./mariadb
-      args:
-        db_name: "${DB_NAME}"
     image: container_mariadb
     ports:
       - '3306'
     networks:
       - backend
+    env_file:
+      - .env
     restart: on-failure
     volumes:
       - db:/var/lib/mysql

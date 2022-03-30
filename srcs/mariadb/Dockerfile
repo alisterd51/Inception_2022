@@ -14,13 +14,14 @@ FROM	debian:buster
 
 RUN	apt-get update	\
 	&& apt-get upgrade -y	\
-	&& apt-get install -y mariadb-server	\
-	&& mkdir -p /var/lib/mysql
+	&& apt-get install -y mariadb-server procps	\
+	&& mkdir -p /var/lib/mysql	\
+	&& mkdir -p /var/run/mysqld
 
 COPY	my.cnf /etc/mysql/.
+COPY	wordpress.sql /wordpress.sql
 
-ARG	db_name
+COPY	entrypoint-mariadb.sh /entrypoint-mariadb.sh
+RUN	chmod +x /entrypoint-mariadb.sh
 
-RUN	env > env_tmp
-
-ENTRYPOINT ["mysqld_safe"]
+ENTRYPOINT ["/entrypoint-mariadb.sh"]
