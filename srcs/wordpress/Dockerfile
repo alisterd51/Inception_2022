@@ -15,7 +15,7 @@ FROM	debian:buster
 #Install utils
 RUN	apt-get update	\
 	&& apt-get upgrade -y	\
-	&& apt-get install -y php7.3-fpm php7.3-mysqli wget
+	&& apt-get install -y php7.3-fpm php7.3-mysqli php7.3-curl php7.3-dom php7.3-imagick php7.3-mbstring php7.3-zip php7.3-gd php7.3-intl wget
 
 #Download wordpress
 RUN	wget -O wordpress.tar.gz https://fr.wordpress.org/wordpress-5.9.2-fr_FR.tar.gz	\
