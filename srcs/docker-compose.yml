@@ -9,12 +9,9 @@ services:
       - '443:443'
     networks:
       - backend
-    restart: on-failure
+    restart: always
     volumes:
       - wp:/var/www/html
-    depends_on:
-      - wordpress
-      - mariadb
   wordpress:
     container_name: container_wordpress
     build:
@@ -29,11 +26,9 @@ services:
       - '9000'
     networks:
       - backend
-    restart: on-failure
+    restart: always
     volumes:
       - wp:/var/www/html
-    depends_on:
-      - mariadb
   mariadb:
     container_name: container_mariadb
     build:
@@ -45,7 +40,7 @@ services:
       - backend
     env_file:
       - .env
-    restart: on-failure
+    restart: always
     volumes:
       - db:/var/lib/mysql
 
