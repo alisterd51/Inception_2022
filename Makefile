@@ -16,4 +16,4 @@ up:
 down:
 	docker-compose -f srcs/docker-compose.yml --env-file srcs/.env down
 clean:	down
-	rm -rf /home/anclarma/data
+	sudo rm -rf /home/anclarma/data

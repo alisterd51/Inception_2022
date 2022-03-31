@@ -2,9 +2,9 @@ version: "3.9"
 
 services:
   nginx:
-    container_name: container_nginx
-    build: ./nginx
-    image: container_nginx
+    container_name: nginx
+    build: requirements/nginx
+    image: nginx
     ports:
       - '443:443'
     networks:
@@ -12,16 +12,18 @@ services:
     restart: on-failure
     volumes:
       - wp:/var/www/html
+    environment:
+      - DOMAIN_NAME=${DOMAIN_NAME}
   wordpress:
-    container_name: container_wordpress
+    container_name: wordpress
     build:
-      context: ./wordpress
+      context: requirements/wordpress
       args:
         db_name: "${DB_NAME}"
         db_user: "${DB_USER}"
         db_password: "${DB_PASSWORD}"
         db_host: "${DB_HOST}"
-    image: container_wordpress
+    image: wordpress
     ports:
       - '9000'
     networks:
@@ -30,10 +32,10 @@ services:
     volumes:
       - wp:/var/www/html
   mariadb:
-    container_name: container_mariadb
+    container_name: mariadb
     build:
-      context: ./mariadb
-    image: container_mariadb
+      context: requirements/mariadb
+    image: mariadb
     ports:
       - '3306'
     networks:
