@@ -9,7 +9,7 @@ services:
       - '443:443'
     networks:
       - backend
-    restart: always
+    restart: on-failure
     volumes:
       - wp:/var/www/html
   wordpress:
@@ -26,7 +26,7 @@ services:
       - '9000'
     networks:
       - backend
-    restart: always
+    restart: on-failure
     volumes:
       - wp:/var/www/html
   mariadb:
@@ -40,7 +40,7 @@ services:
       - backend
     env_file:
       - .env
-    restart: always
+    restart: on-failure
     volumes:
       - db:/var/lib/mysql
 
